@@ -1,0 +1,9 @@
+version: "3.7"
+services: 
+  linux:
+    tty: true
+    container_name: pascal-compiler-container
+    image: antonyacosta78/free-pascal:v2
+    volumes: 
+      - ./code:/home/code
+      

@@ -1,0 +1,13 @@
+crear container: 
+  docker-compose up --build
+
+ejecutar shell en container:
+  docker exec -it pascal-compiler-container sh
+
+navegar hasta deps/fpc-3.0.4.i386-linux
+  cd deps/fpc-3.0.4.i386-linux
+
+ejecutar install.sh
+  sh install.sh
+
+seguir el proceso de instalacion aceptando valor default/no
