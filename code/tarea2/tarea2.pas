@@ -71,14 +71,23 @@ procedure masCercana
               palabra     : TipoPalabra;
               var resultado : TipoPalabra;
               var distancia : TipoDistancia);
+  var actualPalabra: TipoPalabra;
   begin
+    distancia := MaxLargo;
+    {loop through vocabulario to find the word with smaller distancia and index}
+    for actualPalabra in vocabulario do begin
+      if distancia > distanciaPalabra(palabra, actualPalabra) then begin
+        distancia := distanciaPalabra(palabra, actualPalabra);
+        resultado := actualPalabra;
+      end; 
+    end; {for}
 end;
 
 function pertenecePalabra (palabra : TipoPalabra; vocabulario : TipoVocabulario): boolean;
   var actualPalabra: TipoPalabra;
   begin
     for actualPalabra in vocabulario do begin
-      if(igualPalabra(actualPalabra, palabra)) then begin
+      if igualPalabra(actualPalabra, palabra) then begin
         pertenecePalabra := true;
       exit; end; {if}
     end; { for }
@@ -88,6 +97,7 @@ end;
 
 function completarPalabra (prefijo : TipoPalabra; vocabulario : TipoVocabulario) : ListaPalabras;
 begin
+
 end;
 
 function estanTodas( lista : ListaPalabras; vocabulario : TipoVocabulario) : boolean;
