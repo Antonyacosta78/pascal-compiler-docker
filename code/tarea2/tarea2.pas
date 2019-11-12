@@ -75,7 +75,15 @@ procedure masCercana
 end;
 
 function pertenecePalabra (palabra : TipoPalabra; vocabulario : TipoVocabulario): boolean;
-begin
+  var actualPalabra: TipoPalabra;
+  begin
+    for actualPalabra in vocabulario do begin
+      if(igualPalabra(actualPalabra, palabra)) then begin
+        pertenecePalabra := true;
+      exit; end; {if}
+    end; { for }
+    
+    pertenecePalabra := false;
 end;
 
 function completarPalabra (prefijo : TipoPalabra; vocabulario : TipoVocabulario) : ListaPalabras;
