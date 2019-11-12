@@ -6,30 +6,45 @@
 
 
 function esPrefijo (pal1,pal2 : TipoPalabra) : boolean;
-var
-   hasDiff: boolean;
-   i: integer;  
-begin
-  if pal1.largo = 0 then begin 
-      esPrefijo := true;
-      exit;
-  end;
-  if pal1.largo > pal2.largo then begin
-    esPrefijo := false;
-    exit;
-  end;
-  writeln('no toy');
-  hasDiff := false;
+  var
+    hasDiff: boolean;
+    i: integer;  
+  begin
+    if pal1.largo = 0 then begin 
+        esPrefijo := true;
+    exit; end;
+    if pal1.largo > pal2.largo then begin
+      esPrefijo := false;
+    exit; end;
 
-  for i := 1 to pal1.largo do begin
-    if (not hasDiff) and (pal1.info[i] <> pal2.info[i]) then hasDiff := true;
-  end;
+    hasDiff := false;
 
-  esPrefijo := not hasDiff;
+    for i := 1 to pal1.largo do begin
+      if (not hasDiff) and (pal1.info[i] <> pal2.info[i]) then hasDiff := true;
+    end;
+
+    esPrefijo := not hasDiff;
 end;
 
 function igualPalabra (pal1,pal2 : TipoPalabra) : boolean;
-begin
+  var i: integer;
+  begin
+    if pal1.largo <> pal2.largo then begin
+      igualPalabra := false;
+    exit; end;
+    if pal1.largo = 0 then begin
+      igualPalabra := true;
+    exit; end;
+
+    { a partir de aqui, se puede asumir que pal1.largo y pal2.largo son iguales }
+    { y que tienen por lo menos una letra }
+    for i:=1 to pal1.largo do begin
+      if pal1.info[i] <> pal2.info[i] then begin
+        igualPalabra := false;
+      exit; end;
+    end;
+
+    igualPalabra := true;
 end;
 
 procedure palabraADistancia
@@ -37,7 +52,18 @@ procedure palabraADistancia
                 vocabulario   : TipoVocabulario;
                 distancia     : TipoDistancia;
                 var resultado : PosiblePalabra);
-begin
+  var 
+    actualPalabra: TipoPalabra;  
+
+  begin
+  resultado.hayPalabra := false;
+  
+  for actualPalabra in vocabulario do begin;
+    if distanciaPalabra(palabra, actualPalabra) < distancia then begin
+      resultado.hayPalabra := true;
+      resultado.palabra := actualPalabra;
+    exit; end;{ if }
+  end; { for }
 end;
 
 procedure masCercana
@@ -45,7 +71,7 @@ procedure masCercana
               palabra     : TipoPalabra;
               var resultado : TipoPalabra;
               var distancia : TipoDistancia);
-begin
+  begin
 end;
 
 function pertenecePalabra (palabra : TipoPalabra; vocabulario : TipoVocabulario): boolean;
