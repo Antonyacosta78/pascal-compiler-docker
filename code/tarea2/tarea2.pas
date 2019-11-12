@@ -96,10 +96,56 @@ function pertenecePalabra (palabra : TipoPalabra; vocabulario : TipoVocabulario)
 end;
 
 function completarPalabra (prefijo : TipoPalabra; vocabulario : TipoVocabulario) : ListaPalabras;
-begin
+  var 
+    lista, punta: ListaPalabras;
+    item: TipoPalabra;
 
+    procedure appendTolist(item: TipoPalabra; var list, tail: ListaPalabras);
+      var cell: celda;
+      begin
+        cell.info := item;
+        new(cell.sig);
+       { if !list^.info then list^.info = item, else, sig is new and bla bla bla  }
+        if nil = list then begin
+          new(list);
+          new(tail);
+          list^ := cell; 
+        end else begin
+          { keep tracking of tail }
+          tail^.sig^ := cell;
+        end;
+        {if-else-if}
+        tail^ := cell;
+        
+    end; {appendToList}
+
+  begin
+  {loop through vocabulario finding every word where esPrefijo == true, return a linked list}
+
+  lista := nil;
+  punta := lista;
+
+  for item in vocabulario do begin
+    if esPrefijo(prefijo, item) then begin
+      appendToList(item, lista, punta);
+    end; {if}
+  end; {for}
+
+  completarPalabra := lista;
 end;
 
 function estanTodas( lista : ListaPalabras; vocabulario : TipoVocabulario) : boolean;
-begin
+  var tail: ListaPalabras;
+  begin
+    new(tail);
+    tail := lista;
+    {loop through linkedList of words to find if one is not in vocabulario}
+    while tail <> nil do begin
+      if not pertenecePalabra(tail^.info, vocabulario) then begin
+        estanTodas := false;
+      exit; end; {if}
+      tail := tail^.sig;
+    end; {while}
+
+    estanTodas := true;
 end;
