@@ -53,16 +53,22 @@ procedure palabraADistancia
                 distancia     : TipoDistancia;
                 var resultado : PosiblePalabra);
   var 
-    actualPalabra: TipoPalabra;  
+    actualPalabra: TipoPalabra;
+    actualDistancia: integer;
 
   begin
   resultado.hayPalabra := false;
   
   for actualPalabra in vocabulario do begin;
-    if distanciaPalabra(palabra, actualPalabra) < distancia then begin
+    actualDistancia := distanciaPalabra(palabra, actualPalabra); 
+    if actualDistancia < distancia then begin
       resultado.hayPalabra := true;
       resultado.palabra := actualPalabra;
-    exit; end;{ if }
+    exit; end 
+    else if actualDistancia = distancia then begin
+      resultado.hayPalabra := true;
+      resultado.palabra := actualPalabra;
+    exit; end; { if else if }
   end; { for }
 end;
 
@@ -100,34 +106,34 @@ function completarPalabra (prefijo : TipoPalabra; vocabulario : TipoVocabulario)
     lista, punta: ListaPalabras;
     item: TipoPalabra;
 
-    procedure appendTolist(item: TipoPalabra; var list, tail: ListaPalabras);
+    procedure appendTolist(item: TipoPalabra; var tail: ListaPalabras);
       var cell: celda;
       begin
+        {appends item to tail, updates tail ref}
         cell.info := item;
-        new(cell.sig);
-       { if !list^.info then list^.info = item, else, sig is new and bla bla bla  }
-        if nil = list then begin
-          new(list);
-          new(tail);
-          list^ := cell; 
-        end else begin
-          { keep tracking of tail }
-          tail^.sig^ := cell;
-        end;
-        {if-else-if}
-        tail^ := cell;
-        
+        cell.sig := nil;
+
+        new(tail^.sig);
+        tail^.sig^ := cell; 
+        tail := tail^.sig;
     end; {appendToList}
 
   begin
   {loop through vocabulario finding every word where esPrefijo == true, return a linked list}
 
   lista := nil;
-  punta := lista;
+  punta := nil;
 
   for item in vocabulario do begin
     if esPrefijo(prefijo, item) then begin
-      appendToList(item, lista, punta);
+        if nil = lista then begin
+          new(lista);
+          lista^.info := item;
+          lista^.sig := nil;
+          punta := lista;
+        end else begin
+          appendToList(item, punta);
+        end;
     end; {if}
   end; {for}
 
